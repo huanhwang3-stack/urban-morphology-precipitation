@@ -1,0 +1,164 @@
+!-------------------------------------------------------------------------------
+!-- INITIALIZATION PARAMETER NAMELIST
+!   https://palm.muk.uni-hannover.de/trac/wiki/doc/app/initialization_parameters
+!-------------------------------------------------------------------------------
+&initialization_parameters
+    nx                         = 999, ! Number of gridboxes in x-direction (nx+1)
+    ny                         = 599, ! Number of gridboxes in y-direction (ny+1)
+    nz                         = 100, ! Number of gridboxes in z-direction (nz)
+
+    dx                         = 15.0, ! Size of signgle gridbox in x-direction
+    dy                         = 15.0, ! Size of single gridbox in y-direction
+    dz                         = 10.0, ! Size of single gridbox in z-direction
+
+    dz_stretch_level           = 200.0, ! Height (in m) where stretching starts
+    dz_stretch_factor          = 1.035,   ! dz(k+1) = dz(k) * dz_stretch_factor     4700m
+ 
+ 
+         constant_flux_layer = .T.,
+   ! initializing_actions       = 'read_restart_data',  !'cyclic_fill',
+    initializing_actions = 'set_constant_profiles',  
+         !residual_limit = 0.00001,
+ 
+    pt_surface                 = 298.7, ! initial surface potential temp
+    pt_vertical_gradient       = 0.393,  1.13,0.370, !/100 m
+    pt_vertical_gradient_level = 520,  1500,2000,
+ 
+
+    q_surface                 = 0.017, ! initial surface potential temp
+    q_vertical_gradient       = -0.000135,  -0.0006,-0.00127,-0.000122,
+    q_vertical_gradient_level = 0, 520,  1500,2000,
+ 
+         roughness_length = 0.1,
+         z0h_factor = 0.1, 
+
+
+ 
+         conserve_volume_flow = .F.,     
+
+ 
+          !pt_damping_factor =0.1,
+         ! pt_damping_width = 22500,
+          rayleigh_damping_factor = 0.1,
+         ! rayleigh_damping_height = 2700.0,
+
+
+
+         bc_uv_t = 'neumann',                  ! open channel boundary condition
+         bc_s_b = 'neumann',
+    bc_pt_b = 'neumann',
+   ! bc_pt_t = 'initial_gradient',
+    bc_pt_t = 'neumann',
+   !bc_q_b = 'neumann',
+    bc_q_t = 'neumann',   
+    topography = 'read_from_file',
+    approximation = 'anelastic',
+
+
+
+ 
+    momentum_advec =           'ws-scheme',        
+    scalar_advec   =           'ws-scheme',          
+    timestep_scheme=           'runge-kutta-3',
+         fft_method     = 'fftw',
+         masking_method = .T.,
+
+   ! bc_lr  = 'dirichlet/radiation',
+   ! psolver  = 'multigrid',
+  
+ 
+         omega = 0.0, 
+       ug_surface =1.0,
+       vg_surface   = 0.0,
+    dp_external = .F.,
+	! dp_smooth = .F.,
+	! dp_level_b = 0.0,
+	 !dpdxy = -0.0001, 0.0,
+    !mg_cycles = 2   
+    humidity = .TRUE.,  
+/ ! end of initialization parameter namelist
+
+ 
+ 
+&runtime_parameters 
+    dt_max = 2.0,
+    npex = 20,
+    npey = 6,
+    !dt                         =1.0,     ! time step (for this setup unfortunately unphysically;
+    end_time                   =15000.0, ! simulation time of the 3D model
+    termination_time_needed   =     600.0,
+   ! skip_time_data_output     =  800.0,
+
+
+    dt_run_control             = 10.0,    ! output interval for run control
+    dt_data_output             = 100.0,  ! output interval for general data
+    dt_data_output_av          = 100.0, ! output interval for averaged data
+    averaging_interval         = 100.0, ! averaging interval general data
+    dt_dopr                    = 100.0,  ! output interval for profile data
+  
+ 
+      create_disturbances      =    .T.,
+          disturbance_energy_limit =   0.001, 
+    dt_disturb                 = 10.0,   ! interval for random perturbations
+ 
+    data_output_2d_on_each_pe  = .FALSE., ! don't do 2D output on each MPI rank
+
+ 
+
+
+     section_xy                 = 0,1,
+
+
+    data_output                =  'u_av',  'uu_product_av','uv_product_av', 'uw_product_av','vv_product_av','vw_product_av', 'ww_product_av', 'wq_product_av', 'wtheta_product_av',
+                                  'v_av',
+                                  'w_av','ta_av',
+                                  'theta_av',
+                                 'p_av',   'q_av', 'ql_av','qv_av', 'qc_av','qr_av', 'nc_av', 'nr_av', 'prr_av','prr_cloud_av','prr_rain_av',
+                                  'u', 
+                                  'v',
+                                  'w', 'p', 'theta', 'ta',  
+'qv', ! water vapor mixing ratio
+'q', ! water vapor mixing ratio (or total water mixing ratio if cloud physics is switched on)	kg/kg
+'qc', ! cloud water mixing ratio	kg/kg
+'ql',  !liquid water mixing ratio	kg/kg
+'qr', ! rain water mixing ratio	kg/kg
+'nc',! cloud drop number density	1/m3
+ 'nr', !rain drop number density	1/m3
+'pra*_xy',  ! precipitation amount mm
+'prr', !	total precipitation rate of all cloud species kg/kg m/s
+'prr_cloud', ! precipitation rate of cloud droplets (by sedimentation)	kg/kg m/s
+'prr_rain',!	precipitation rate of rain droplets	kg/kg m/s
+ 
+ 
+ 
+    data_output_pr             = 'u',
+                                 'v',
+                                 'w',
+                                 'theta','p', 
+                                 'q','qv','nc', 'nr',
+                                 'qc','qr',
+                                 'ql','prr',  'prr_cloud','prr_rain', 'hyp',
+ 
+ 
+/ ! end of runtime parameter namelist
+ 
+&user_parameters
+         bool_circle = .TRUE.,
+/
+ 
+
+&bulk_cloud_parameters
+    cloud_scheme = 'morrison',                  
+    call_microphysics_at_all_substeps = .TRUE.,  
+ 
+ cloud_water_sedimentation = .TRUE.,
+  collision_turbulence = .TRUE.,
+ curvature_solution_effects_bulk = .TRUE.,
+
+ !aerosol_bulk = 'nh4no3',
+na_init = 5.0E8,   !Background dry aerosol concentration .   	Fixed cloud droplet number density 1/m3
+dry_aerosol_radius =  5E-8, 
+sigma_bulk = 2.0 , !The dispersion of the dry aerosol spectrum.
+
+/
+  
