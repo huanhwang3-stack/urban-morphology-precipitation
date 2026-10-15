@@ -56,11 +56,11 @@ urban-morphology-precipitation/
 │       │
 │       └── 2Kansas/
 │           ├── out/
-│           │   └── NYC__NORM_PROFILE_BY_WIND.npz
+│           │   └── Kansas__NORM_PROFILE_BY_WIND.npz
 │           ├── out2/
-│           │   └── NYC__NORM_PROFILE_BY_WIND.npz
+│           │   └── Kansas__NORM_PROFILE_BY_WIND.npz
 │           └── out3/
-│               └── NYC__NORM_PROFILE_BY_WIND.npz
+│               └── Kansas__NORM_PROFILE_BY_WIND.npz
 │
 ├── README.md
 └── LICENSE
@@ -241,6 +241,46 @@ python demo/Fig1d_demo.py
 The script reads the processed precipitation profiles and generates the comparison figure corresponding to manuscript Fig. 1d.
 
 The demonstration assumes that input paths are resolved relative to the demo script directory.
+
+### Installation and Runtime
+
+The Figure 1d demonstration can be run independently using the processed observational data provided in this repository. Downloading the original ERA5 and IMERG datasets is not required.
+
+**Installation**
+
+Clone the repository:
+
+```bash
+git clone https://github.com/huanhwang3-stack/urban-morphology-precipitation.git
+cd urban-morphology-precipitation
+```
+
+Install the required Python packages:
+
+```bash
+python -m pip install numpy scipy matplotlib
+```
+
+**Execution**
+
+Run the demonstration from the repository root directory:
+
+```bash
+python demo/Fig1d_demo.py
+```
+
+The script reads the six processed `.npz` files included in `demo/data/` and generates the precipitation-profile comparison corresponding to Fig. 1d of the manuscript.
+
+**Runtime and computational requirements**
+
+- **Operating system:** Linux (other systems may also work).
+- **Software:** Python with NumPy, SciPy, and Matplotlib.
+- **Input data:** Six processed `.npz` files included in the repository.
+- **Computational resources:** A standard personal computer; no GPU or high-performance computing resources are required.
+- **Expected runtime:** The demonstration is designed to complete within a short period on a typical personal computer. Actual execution time depends on the system and Python environment.
+
+Unlike the complete observational analysis and PALM simulations, this demonstration does not require downloading large datasets or performing computationally intensive simulations.
+
 
 ### Reproducibility Scope
 
