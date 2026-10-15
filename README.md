@@ -11,7 +11,7 @@ The study combines precipitation observations, atmospheric reanalysis, urban mor
 ## Repository structure
 
 ```text
-Code/
+
 ├── observational_analysis/
 │   ├── 1ERA5/
 │   ├── 2IMERGE/
